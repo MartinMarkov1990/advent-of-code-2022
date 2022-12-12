@@ -26,6 +26,15 @@ class Outcome(Enum):
     DRAW = 3
     LOSS = 0
 
+    @classmethod
+    def get_outcome_from_code(cls, code):
+        mapping = {
+            'X': cls.LOSS,
+            'Y': cls.DRAW,
+            'Z': cls.WIN
+        }
+        return mapping[code]
+
 
 class Game():
     hand_vs_mapping = {
@@ -40,18 +49,27 @@ class Game():
         (Hand.SCISSORS, Hand.SCISSORS): Outcome.DRAW
     }
 
-    def __init__(self, play):
+    mapping_inverted = {(theirs, outcome): ours for (theirs, ours), outcome in hand_vs_mapping.items()}
+
+    def __init__(self, play, part_1=True):
         self.raw = play
         self.their_move = Hand.get_hand_from_code(play[0])
-        self.our_move = Hand.get_hand_from_code(play[1])
-        self.outcome = self.calculate_outcome()
-        self.points = self.calculate_points()
+        if part_1:
+            self.our_move = Hand.get_hand_from_code(play[1])
+            self.calculate_outcome()
+        else:
+            self.outcome = Outcome.get_outcome_from_code(play[1])
+            self.calculate_our_move()
+        self.calculate_points()
 
     def calculate_outcome(self):
         self.outcome = Game.hand_vs_mapping[(self.their_move, self.our_move)]
 
     def calculate_points(self):
         self.points = self.outcome.value + self.our_move.value
+
+    def calculate_our_move(self):
+        self.our_move = self.mapping_inverted[(self.their_move, self.outcome)]
 
     def __str__(self):
         return f"Their move: {self.their_move}; our move: {self.our_move}. Outcome: {self.outcome}. Points: {self.points}. Raw input: {self.raw}"
@@ -63,14 +81,14 @@ def fetch_plays(file='input.txt') -> list[list]:
     return [row.replace('\n', '').split(' ') for row in raw]
 
 
-def make_games(plays) -> list[Game]:
-    return [Game(play) for play in plays]
+def make_games(plays, part_1=True) -> list[Game]:
+    return [Game(play, part_1=part_1) for play in plays]
 
 
 if __name__ == '__main__':
     plays = fetch_plays()
-    games = make_games(plays)
+    games = make_games(plays, part_1=False)
     for game in games:
-        game.calculate_points()
+        print(game)
     total_points = sum([game.points for game in games])
     print(total_points)
