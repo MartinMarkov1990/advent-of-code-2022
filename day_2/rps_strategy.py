@@ -44,20 +44,16 @@ class Game():
         self.raw = play
         self.their_move = Hand.get_hand_from_code(play[0])
         self.our_move = Hand.get_hand_from_code(play[1])
-        self.outcome = None
-        self.points = None
+        self.outcome = self.calculate_outcome()
+        self.points = self.calculate_points()
 
     def calculate_outcome(self):
         self.outcome = Game.hand_vs_mapping[(self.their_move, self.our_move)]
 
     def calculate_points(self):
-        if not self.outcome:
-            self.calculate_outcome()
         self.points = self.outcome.value + self.our_move.value
 
     def __str__(self):
-        if not self.points:
-            self.calculate_points()
         return f"Their move: {self.their_move}; our move: {self.our_move}. Outcome: {self.outcome}. Points: {self.points}. Raw input: {self.raw}"
 
 
