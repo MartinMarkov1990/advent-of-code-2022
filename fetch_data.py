@@ -6,7 +6,7 @@ import requests
 USER_SESSION = '53616c7465645f5f5168073fd2bf8ec1c7d3a858007ddd92d2ef768a53c5a8' + \
     '527892df2189e7a812917efe690a2c3784592f567cd5551a508b01e95931fbce55'
 INPUT_URL_FORMAT = 'https://adventofcode.com/2022/day/{day}/input'
-DIRECTORY_FORMAT = 'day-{day}'
+DIRECTORY_FORMAT = 'day_{day}'
 
 
 def fetch_daily_data(day=1) -> requests.Response:
