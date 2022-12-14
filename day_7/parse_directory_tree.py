@@ -72,10 +72,20 @@ class FileTree:
 
 if __name__ == '__main__':
     THRESHOLD = 100000
+    TOTAL_DISC_SPACE = 70000000
+    NECESSARY_FREE_SPACE = 30000000
     filetree = FileTree()
     filetree.parse_file()
+
+    # part 1
     small_dirs = [node for node in LevelOrderIter(filetree.root) if isinstance(node, Dir) and node.size <= THRESHOLD]
-    for dir in small_dirs:
-        print(f"{dir.path}: {dir.size}")
     total_size_small_dirs = sum([dir.size for dir in small_dirs])
     print(f"Total size to save: {total_size_small_dirs}")
+
+    # part 2
+    current_free_space = TOTAL_DISC_SPACE - filetree.root.size
+    extra_space_necessary = NECESSARY_FREE_SPACE - current_free_space
+    print("Extra space necessary:", extra_space_necessary)
+    candidate_directories = [node for node in LevelOrderIter(filetree.root) if isinstance(node, Dir) and node.size >= extra_space_necessary]
+    directory_to_delete = [dir for dir in candidate_directories if dir.size == min([dir.size for dir in candidate_directories])]
+    print(directory_to_delete[0].path, directory_to_delete[0].size)
