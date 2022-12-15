@@ -34,4 +34,4 @@ def fetch_multiple_inputs(min_day=1, max_day=26):
 
 
 if __name__ == '__main__':
-    fetch_multiple_inputs(1, 31)
+    fetch_multiple_inputs(10, 14)
