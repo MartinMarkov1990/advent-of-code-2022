@@ -80,7 +80,7 @@ class Rope:
     def make_move(self, move: Move):
         for i in range(move.steps):
             self.make_step(move.direction)
-        logging.info("; ".join([f"{knot.name}: {knot.x}, {knot.y}" for knot in self.knots]))
+        logging.debug("; ".join([f"{knot.name}: {knot.x}, {knot.y}" for knot in self.knots]))
 
     def update_tail(self):
         self.knots[1].update_position()
@@ -100,7 +100,7 @@ def parse_to_moves(input: list[str]) -> list[Move]:
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
+    # logging.basicConfig(level=logging.DEBUG)
     input = fetch_input()
     moves = parse_to_moves(input)
     # part 1
